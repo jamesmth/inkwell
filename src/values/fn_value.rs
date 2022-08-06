@@ -35,7 +35,8 @@ pub struct FunctionValue<'ctx> {
 }
 
 impl<'ctx> FunctionValue<'ctx> {
-    pub(crate) unsafe fn new(value: LLVMValueRef) -> Option<Self> {
+    /// Instantiate a new `FunctionValue` from a raw LLVM value pointer.
+    pub unsafe fn new(value: LLVMValueRef) -> Option<Self> {
         if value.is_null() {
             return None;
         }

@@ -175,7 +175,12 @@ pub struct Module<'ctx> {
 }
 
 impl<'ctx> Module<'ctx> {
-    pub(crate) unsafe fn new(module: LLVMModuleRef) -> Self {
+    /// Instantiate a new `Module` from a raw LLVM module pointer.
+    ///
+    /// # Safety
+    ///
+    /// No check is being made to ensure the given pointer points to some valid LLVM module.
+    pub unsafe fn new(module: LLVMModuleRef) -> Self {
         debug_assert!(!module.is_null());
 
         Module {

@@ -1241,6 +1241,7 @@ impl LLVMReference<LLVMPassRegistryRef> for PassRegistry {
     }
 }
 
+#[llvm_versions(13.0..=latest)]
 #[cfg(feature = "internal-getters")]
 impl LLVMReference<LLVMPassBuilderOptionsRef> for PassBuilderOptions {
     unsafe fn get_ref(&self) -> LLVMPassBuilderOptionsRef {

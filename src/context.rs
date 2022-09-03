@@ -5,7 +5,7 @@ use crate::InlineAsmDialect;
 use libc::c_void;
 #[llvm_versions(4.0..7.0)]
 use llvm_sys::core::LLVMConstInlineAsm;
-#[llvm_versions(12.0..=latest)]
+#[llvm_versions(13.0..=latest)]
 use llvm_sys::core::LLVMCreateTypeAttribute;
 #[llvm_versions(7.0..=latest)]
 use llvm_sys::core::LLVMGetInlineAsm;
@@ -991,7 +991,7 @@ impl Context {
     /// assert_eq!(type_attribute.get_type_value(), any_type);
     /// assert_ne!(type_attribute.get_type_value(), context.i64_type().as_any_type_enum());
     /// ```
-    #[llvm_versions(12.0..=latest)]
+    #[llvm_versions(13.0..=latest)]
     pub fn create_type_attribute(&self, kind_id: u32, type_ref: AnyTypeEnum) -> Attribute {
         unsafe { Attribute::new(LLVMCreateTypeAttribute(self.context, kind_id, type_ref.as_type_ref())) }
     }

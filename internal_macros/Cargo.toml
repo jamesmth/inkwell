@@ -3,9 +3,9 @@ authors = ["Daniel Kolsoi <thadan64@gmail.com>"]
 description = "Internal macro crate for inkwell"
 edition = "2021"
 license = "Apache-2.0"
-name = "inkwell_internals"
+name = "llvm-plugin-inkwell-internals"
 readme = "README.md"
-repository = "https://github.com/TheDan64/inkwell"
+repository = "https://github.com/jamesmth/inkwell"
 version = "0.6.0"
 
 [dependencies]

@@ -1,4 +1,4 @@
-use llvm_sys::core::{LLVMIsAConstantArray, LLVMIsAConstantDataArray};
+use llvm_sys::core::{LLVMGetAsString, LLVMIsAConstantArray, LLVMIsAConstantDataArray, LLVMIsConstantString};
 use llvm_sys::prelude::LLVMValueRef;
 
 use std::ffi::CStr;
@@ -81,6 +81,22 @@ impl<'ctx> ArrayValue<'ctx> {
     /// ```
     pub fn is_const(self) -> bool {
         self.array_value.is_const()
+    }
+
+    /// Determines whether or not an `ArrayValue` is a constant string.
+    pub fn is_const_string(self) -> bool {
+        unsafe { LLVMIsConstantString(self.as_value_ref()) == 1 }
+    }
+
+    /// Returns a string constant if the `ArrayValue` is one, `None` otherwise.
+    pub fn get_string_constant(&self) -> Option<&[u8]> {
+        let mut len = 0;
+        unsafe {
+            self.is_const_string()
+                .then(|| LLVMGetAsString(self.as_value_ref(), &mut len))
+                .and_then(|ptr| (!ptr.is_null()).then(|| ptr.cast::<u8>()))
+                .map(|ptr| std::slice::from_raw_parts(ptr, len))
+        }
     }
 }
 

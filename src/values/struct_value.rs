@@ -1,11 +1,17 @@
+use either::{
+    Either,
+    Either::{Left, Right},
+};
+use llvm_sys::core::{LLVMGetNumOperands, LLVMGetOperand, LLVMIsABasicBlock, LLVMSetOperand, LLVMValueAsBasicBlock};
 use llvm_sys::prelude::LLVMValueRef;
 
 use std::ffi::CStr;
 use std::fmt::{self, Display};
 
+use crate::basic_block::BasicBlock;
 use crate::types::StructType;
 use crate::values::traits::AsValueRef;
-use crate::values::{InstructionValue, Value};
+use crate::values::{BasicValue, BasicValueEnum, InstructionValue, Value};
 
 use super::AnyValue;
 
@@ -52,6 +58,46 @@ impl<'ctx> StructValue<'ctx> {
 
     pub fn as_instruction(self) -> Option<InstructionValue<'ctx>> {
         self.struct_value.as_instruction()
+    }
+
+    pub fn get_num_operands(self) -> u32 {
+        unsafe { LLVMGetNumOperands(self.as_value_ref()) as u32 }
+    }
+
+    pub fn set_operand<BV: BasicValue<'ctx>>(self, index: u32, val: BV) -> bool {
+        let num_operands = self.get_num_operands();
+
+        if index >= num_operands {
+            return false;
+        }
+
+        unsafe { LLVMSetOperand(self.as_value_ref(), index, val.as_value_ref()) }
+
+        true
+    }
+
+    pub fn get_operand(self, index: u32) -> Option<Either<BasicValueEnum<'ctx>, BasicBlock<'ctx>>> {
+        let num_operands = self.get_num_operands();
+
+        if index >= num_operands {
+            return None;
+        }
+
+        let operand = unsafe { LLVMGetOperand(self.as_value_ref(), index) };
+
+        if operand.is_null() {
+            return None;
+        }
+
+        let is_basic_block = unsafe { !LLVMIsABasicBlock(operand).is_null() };
+
+        if is_basic_block {
+            let bb = unsafe { BasicBlock::new(LLVMValueAsBasicBlock(operand)) };
+
+            Some(Right(bb.expect("BasicBlock should always be valid")))
+        } else {
+            Some(Left(unsafe { BasicValueEnum::new(operand) }))
+        }
     }
 
     pub fn replace_all_uses_with(self, other: StructValue<'ctx>) {

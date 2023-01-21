@@ -23,7 +23,7 @@ branch with a corresponding LLVM feature flag:
 
 ```toml
 [dependencies]
-inkwell = { package = "llvm-plugin-inkwell", version = "0.1", features = ["llvm12-0"] }
+inkwell = { package = "llvm-plugin-inkwell", version = "0.2", features = ["llvm12-0"] }
 ```
 
 Supported versions:

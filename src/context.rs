@@ -358,7 +358,7 @@ impl ContextImpl {
         }
     }
 
-    #[llvm_versions(12.0..=latest)]
+    #[llvm_versions(13.0..=latest)]
     fn create_type_attribute(&self, kind_id: u32, type_ref: AnyTypeEnum) -> Attribute {
         unsafe { Attribute::new(LLVMCreateTypeAttribute(self.0, kind_id, type_ref.as_type_ref())) }
     }
@@ -2077,7 +2077,7 @@ impl<'ctx> ContextRef<'ctx> {
     /// assert_ne!(type_attribute.get_type_value(), context.i64_type().as_any_type_enum());
     /// ```
     #[inline]
-    #[llvm_versions(12.0..=latest)]
+    #[llvm_versions(13.0..=latest)]
     pub fn create_type_attribute(&self, kind_id: u32, type_ref: AnyTypeEnum) -> Attribute {
         self.context.create_type_attribute(kind_id, type_ref)
     }

@@ -1,6 +1,6 @@
 [package]
 name = "llvm-plugin-inkwell"
-version = "0.1.2"
+version = "0.2.0"
 authors = ["Daniel Kolsoi <thadan64@gmail.com>"]
 description = "Inkwell aims to help you pen your own programming languages by safely wrapping llvm-sys."
 documentation = "https://docs.rs/llvm_plugin_inkwell/"
@@ -12,7 +12,7 @@ categories = ["development-tools::ffi"]
 edition = "2021"
 
 [package.metadata.docs.rs]
-features = ["llvm11-0-no-llvm-linking"] # any version >10 will do
+features = ["llvm15-0-no-llvm-linking"] # any version >10 will do
 
 [features]
 default = ["target-all"]

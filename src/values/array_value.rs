@@ -88,6 +88,11 @@ impl<'ctx> ArrayValue<'ctx> {
         unsafe { LLVMIsConstantString(self.as_value_ref()) == 1 }
     }
 
+    /// Determines whether or not an `ArrayValue` is a constant data array.
+    pub fn is_const_data_array(self) -> bool {
+        unsafe { !LLVMIsAConstantDataArray(self.as_value_ref()).is_null() }
+    }
+
     /// Returns a string constant if the `ArrayValue` is one, `None` otherwise.
     pub fn get_string_constant(&self) -> Option<&[u8]> {
         let mut len = 0;
@@ -120,7 +125,7 @@ impl fmt::Debug for ArrayValue<'_> {
         let is_const = self.is_const();
         let is_null = self.is_null();
         let is_const_array = unsafe { !LLVMIsAConstantArray(self.as_value_ref()).is_null() };
-        let is_const_data_array = unsafe { !LLVMIsAConstantDataArray(self.as_value_ref()).is_null() };
+        let is_const_data_array = self.is_const_data_array();
 
         f.debug_struct("ArrayValue")
             .field("name", &name)

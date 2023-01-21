@@ -1,6 +1,6 @@
 [package]
 name = "llvm-plugin-inkwell"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Daniel Kolsoi <thadan64@gmail.com>"]
 description = "Inkwell aims to help you pen your own programming languages by safely wrapping llvm-sys."
 documentation = "https://docs.rs/llvm_plugin_inkwell/"
